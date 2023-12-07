@@ -21,7 +21,7 @@ class OPlot:
     def get_values(self, name):
         values = []
         for trial in self.study.trials:
-            if trial.state == optuna.trial.TrialState.COMPLETE:
+            if trial.state == TrialState.COMPLETE:
                 combined_dict = {**trial.params, **trial.user_attrs}
                 for index, key in enumerate(self.objective_names):
                     combined_dict[key] = trial.values[index]
@@ -55,7 +55,7 @@ class OPlot:
         trials = [
             trial
             for trial in self.study.trials
-            if trial.state == optuna.trial.TrialState.COMPLETE
+            if trial.state == TrialState.COMPLETE
         ]
         x_values = self.get_values(x_name, trials)
         y_values = self.get_values(y_name, trials)

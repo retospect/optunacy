@@ -50,7 +50,6 @@ class OPlot:
     def doIt(self):
         print("testing")
 
-
     def plot(x_name, y_name, z_name=None, x_range=None, y_range=None):
         trials = [
             trial
@@ -76,55 +75,55 @@ class OPlot:
             # Create contour plot
             contour = go.Contour(x=xi, y=yi, z=Z, colorscale="Viridis")
 
-        # Create scatter plot with mouseovers for data points
-        scatter = go.Scatter(
-            x=x_values,
-            y=y_values,
-            mode="markers",
-            marker=dict(color="black", size=5),
-            text=descriptions,
-            hoverinfo="x+y+z+text",
-        )
+            # Create scatter plot with mouseovers for data points
+            scatter = go.Scatter(
+                x=x_values,
+                y=y_values,
+                mode="markers",
+                marker=dict(color="black", size=5),
+                text=descriptions,
+                hoverinfo="x+y+z+text",
+            )
 
-        layout = go.Layout(
-            title=f"{x_name} vs {y_name}" + (f" with {z_name}" if z_name else ""),
-            xaxis=dict(title=x_name, range=x_range),
-            yaxis=dict(title=y_name, range=y_range),
-            hovermode="closest",  # Configure hover mode
-            annotations=[
-                dict(
-                    text=z_name,  # Text you want to display
-                    showarrow=False,
-                    xref="paper",  # Use 'paper' for relative positioning
-                    yref="paper",
-                    x=1.03,  # X position (just right of the colorbar)
-                    y=0.5,  # Y position (center vertically)
-                    textangle=-90,  # Angle of the text (vertical)
-                )
-            ],
-        )
+            layout = go.Layout(
+                title=f"{x_name} vs {y_name}" + (f" with {z_name}" if z_name else ""),
+                xaxis=dict(title=x_name, range=x_range),
+                yaxis=dict(title=y_name, range=y_range),
+                hovermode="closest",  # Configure hover mode
+                annotations=[
+                    dict(
+                        text=z_name,  # Text you want to display
+                        showarrow=False,
+                        xref="paper",  # Use 'paper' for relative positioning
+                        yref="paper",
+                        x=1.03,  # X position (just right of the colorbar)
+                        y=0.5,  # Y position (center vertically)
+                        textangle=-90,  # Angle of the text (vertical)
+                    )
+                ],
+            )
 
-        data = [contour, scatter]
-    else:
-        # Create scatter plot with mouseovers
-        scatter = go.Scatter(
-            x=x_values,
-            y=y_values,
-            mode="markers",
-            marker=dict(color="blue"),
-            text=descriptions,  # Mouseover descriptions for each point
-            hoverinfo="x+y+z+text",
-        )
+            data = [contour, scatter]
+        else:
+            # Create scatter plot with mouseovers
+            scatter = go.Scatter(
+                x=x_values,
+                y=y_values,
+                mode="markers",
+                marker=dict(color="blue"),
+                text=descriptions,  # Mouseover descriptions for each point
+                hoverinfo="x+y+z+text",
+            )
 
-        data = [scatter]
+            data = [scatter]
 
-        # Create layout
-        layout = go.Layout(
-            title=f"{x_name} vs {y_name}" + (f" with {z_name}" if z_name else ""),
-            xaxis=dict(title=x_name, range=x_range),
-            yaxis=dict(title=y_name, range=y_range),
-            hovermode="closest",  # Configure hover mode
-        )
+            # Create layout
+            layout = go.Layout(
+                title=f"{x_name} vs {y_name}" + (f" with {z_name}" if z_name else ""),
+                xaxis=dict(title=x_name, range=x_range),
+                yaxis=dict(title=y_name, range=y_range),
+                hovermode="closest",  # Configure hover mode
+            )
 
         # Create figure and add data
         fig = go.Figure(data=data, layout=layout)

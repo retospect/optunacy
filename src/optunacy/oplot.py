@@ -3,7 +3,7 @@ import plotly.graph_objs as go
 import matplotlib.ticker as ticker
 import numpy as np
 import scipy as scipy
-
+from optuna.trial import TrialState
 
 class OPlot:
     def __init__(self, study, objective_names=[]):

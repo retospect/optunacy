@@ -57,13 +57,13 @@ class OPlot:
             for trial in self.study.trials
             if trial.state == TrialState.COMPLETE
         ]
-        x_values = self.get_values(x_name, trials)
-        y_values = self.get_values(y_name, trials)
-        z_values = self.get_values(z_name, trials) if z_name else None
+        x_values = self.get_values(x_name)
+        y_values = self.get_values(y_name)
+        z_values = self.get_values(z_name) if z_name else None
         descriptions = self.describe_trials(trials)
         layout = 0
         if z_name:
-            z_values = self.get_values(z_name, trials)
+            z_values = self.get_values(z_name)
 
             # Create a grid for the contour plot
             xi = np.linspace(min(x_values), max(x_values), 100)

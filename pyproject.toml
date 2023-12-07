@@ -1,5 +1,5 @@
 [build-system]
-requires = ["poetry-core>=1.1.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
@@ -15,6 +15,12 @@ classifiers = [ "Programming Language :: Python :: 3", ]
 homepage = "https://github.com/retospect/optunacy"
 repository = "https://github.com/retospect/optunacy" 
 
+[tool.poetry.dependencies]
+python = "^3.9"
+plotly = "^5.18.0"
+numpy = "^1.26.2"
+scipy = "^1.11.4"
+
 [tool.bumpver]
 current_version = "0.0.1"
 version_pattern = "MAJOR.MINOR.PATCH"
@@ -26,4 +32,3 @@ push = true
 [tool.bumpver.file_patterns]
 "pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
 "src/optunacy/__init__.py" = ["{version}"]
-

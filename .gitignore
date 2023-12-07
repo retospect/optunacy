@@ -3,6 +3,5 @@ dist
 ***.egg-info
 ***__pycache__
 .tox
-poetry.lock
 ***.pdf
 ***.txt

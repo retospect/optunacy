@@ -51,30 +51,30 @@ class OPlot:
         print("testing")
 
 
-def plot(x_name, y_name, z_name=None, x_range=None, y_range=None):
-    trials = [
-        trial
-        for trial in study.trials
-        if trial.state == optuna.trial.TrialState.COMPLETE
-    ]
-    x_values = self.get_values(x_name, trials)
-    y_values = self.get_values(y_name, trials)
-    z_values = self.get_values(z_name, trials) if z_name else None
-    descriptions = self.describe_trials(trials)
-    layout = 0
-    if z_name:
-        z_values = self.get_values(z_name, trials)
+    def plot(x_name, y_name, z_name=None, x_range=None, y_range=None):
+        trials = [
+            trial
+            for trial in study.trials
+            if trial.state == optuna.trial.TrialState.COMPLETE
+        ]
+        x_values = self.get_values(x_name, trials)
+        y_values = self.get_values(y_name, trials)
+        z_values = self.get_values(z_name, trials) if z_name else None
+        descriptions = self.describe_trials(trials)
+        layout = 0
+        if z_name:
+            z_values = self.get_values(z_name, trials)
 
-        # Create a grid for the contour plot
-        xi = np.linspace(min(x_values), max(x_values), 100)
-        yi = np.linspace(min(y_values), max(y_values), 100)
-        X, Y = np.meshgrid(xi, yi)
-        Z = scipy.interpolate.griddata(
-            (x_values, y_values), z_values, (X, Y), method="cubic"
-        )
+            # Create a grid for the contour plot
+            xi = np.linspace(min(x_values), max(x_values), 100)
+            yi = np.linspace(min(y_values), max(y_values), 100)
+            X, Y = np.meshgrid(xi, yi)
+            Z = scipy.interpolate.griddata(
+                (x_values, y_values), z_values, (X, Y), method="cubic"
+            )
 
-        # Create contour plot
-        contour = go.Contour(x=xi, y=yi, z=Z, colorscale="Viridis")
+            # Create contour plot
+            contour = go.Contour(x=xi, y=yi, z=Z, colorscale="Viridis")
 
         # Create scatter plot with mouseovers for data points
         scatter = go.Scatter(

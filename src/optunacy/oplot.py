@@ -17,7 +17,7 @@ class OPlot:
         self.study = study
         self.objective_names = objective_names
 
-    def get_values(name):
+    def get_values(self, name):
         values = []
         for trial in self.study.trials:
             if trial.state == optuna.trial.TrialState.COMPLETE:
@@ -32,7 +32,7 @@ class OPlot:
                     )
         return values
 
-    def describe_trials(trials):
+    def describe_trials(self, trials):
         i = 0
         results = []
         for trial in self.study.trials:
@@ -50,7 +50,7 @@ class OPlot:
     def doIt(self):
         print("testing")
 
-    def plot(x_name, y_name, z_name=None, x_range=None, y_range=None):
+    def plot(self, x_name, y_name, z_name=None, x_range=None, y_range=None):
         trials = [
             trial
             for trial in self.study.trials

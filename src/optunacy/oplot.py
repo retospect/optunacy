@@ -22,7 +22,7 @@ class OPlot:
         for trial in self.study.trials:
             if trial.state == optuna.trial.TrialState.COMPLETE:
                 combined_dict = {**trial.params, **trial.user_attrs}
-                for index, key in enumerate(objective_names):
+                for index, key in enumerate(self.objective_names):
                     combined_dict[key] = trial.values[index]
                 if name in combined_dict:
                     values.append(combined_dict[name])
@@ -53,7 +53,7 @@ class OPlot:
     def plot(x_name, y_name, z_name=None, x_range=None, y_range=None):
         trials = [
             trial
-            for trial in study.trials
+            for trial in self.study.trials
             if trial.state == optuna.trial.TrialState.COMPLETE
         ]
         x_values = self.get_values(x_name, trials)

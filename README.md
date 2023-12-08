@@ -1,5 +1,5 @@
 [![check](https://github.com/retospect/optunacy/actions/workflows/check.yml/badge.svg)](https://github.com/retospect/optunacy/actions/workflows/check.yml)
-# Optunacy - a better Optuna contour plotter
+# Optunacy - alternate Optuna contour plotter
 
 Plots Optuna contour plots trivially and with detailed mouseovers.
 It collects data from all the hashes in Optuna, as well as the Objectives if you provide them.

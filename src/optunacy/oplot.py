@@ -18,9 +18,9 @@ class OPlot:
         self.study = study
         self.objective_names = objective_names
 
-    def get_values(self, name):
+    def get_values(self, trials, name):
         values = []
-        for trial in self.study.trials:
+        for trial in trials:
             if trial.state == TrialState.COMPLETE:
                 combined_dict = {**trial.params, **trial.user_attrs}
                 for index, key in enumerate(self.objective_names):
@@ -33,10 +33,12 @@ class OPlot:
                     )
         return values
 
+
+
     def describe_trials(self, trials):
         i = 0
         results = []
-        for trial in self.study.trials:
+        for trial in trials:
             desc = f"Trial: {trial.number}"
             for key, value in trial.params.items():
                 if isinstance(value, (int, float)) and (value < 0.001 or value > 10000):
@@ -48,22 +50,19 @@ class OPlot:
             results.append(desc)
         return results
 
-    def doIt(self):
-        print("testing")
-
     def plot(self, x_name, y_name, z_name=None, x_range=None, y_range=None):
         trials = [
             trial
             for trial in self.study.trials
             if trial.state == TrialState.COMPLETE
         ]
-        x_values = self.get_values(x_name)
-        y_values = self.get_values(y_name)
-        z_values = self.get_values(z_name) if z_name else None
+        x_values = self.get_values(trials, x_name)
+        y_values = self.get_values(trials, y_name)
+
         descriptions = self.describe_trials(trials)
         layout = 0
         if z_name:
-            z_values = self.get_values(z_name)
+            z_values = self.get_values(trials, z_name)
 
             # Create a grid for the contour plot
             xi = np.linspace(min(x_values), max(x_values), 100)
@@ -113,7 +112,7 @@ class OPlot:
                 mode="markers",
                 marker=dict(color="blue"),
                 text=descriptions,  # Mouseover descriptions for each point
-                hoverinfo="x+y+z+text",
+                hoverinfo="x+y+text",
             )
 
             data = [scatter]

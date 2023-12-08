@@ -56,7 +56,14 @@ class OPlot:
         return results
 
     def plot(
-        self, x_name, y_name, z_name=None, x_range=None, y_range=None, z_range=None
+        self,
+        x_name,
+        y_name,
+        z_name=None,
+        x_range=None,
+        y_range=None,
+        z_clip=None,
+        interpol="linear",
     ):
         trials = [
             trial for trial in self.study.trials if trial.state == TrialState.COMPLETE
@@ -68,36 +75,16 @@ class OPlot:
         layout = 0
         if z_name:
             z_values = self.get_values(trials, z_name)
-            if z_range:
-                x_n = []
-                y_n = []
-                z_n = []
-                d_n = []
-                for x, y, z, d in zip(x_values, y_values, z_values, descriptions):
-                    is_fine = True
-                    if x_range and not (x_range[0] < x < x_range[1]):
-                        is_fine = False
-                    if y_range and not (y_range[0] < y < y_range[1]):
-                        is_fine = False
-                    if z_range[0] < z < z_range[1]:
-                        is_fine = False
-                    if is_fine:
-                        x_n.append(x)
-                        y_n.append(y)
-                        z_n.append(z)
-                        d_n.append(d)
-                x_values = x_n
-                y_values = y_n
-                z_values = z_n
-                descriptions = d_n
 
             # Create a grid for the contour plot
             xi = np.linspace(min(x_values), max(x_values), 100)
             yi = np.linspace(min(y_values), max(y_values), 100)
             X, Y = np.meshgrid(xi, yi)
             Z = scipy.interpolate.griddata(
-                (x_values, y_values), z_values, (X, Y), method="cubic"
+                (x_values, y_values), z_values, (X, Y), method=interpol
             )
+            if z_clip:
+                Z = np.clip(Z, z_clip[0], z_clip[1])
 
             # Create contour plot
             contour = go.Contour(x=xi, y=yi, z=Z, colorscale="Viridis")
@@ -107,7 +94,7 @@ class OPlot:
                 x=x_values,
                 y=y_values,
                 mode="markers",
-                marker=dict(color="black", size=5),
+                marker=dict(color="white", size=5, line=dict(color="black", width=3)),
                 text=descriptions,
                 hoverinfo="x+y+z+text",
             )
@@ -137,19 +124,6 @@ class OPlot:
             x_n = []
             y_n = []
             d_n = []
-            for x, y, d in zip(x_values, y_values, descriptions):
-                is_fine = True
-                if x_range and not (x_range[0] < x < x_range[1]):
-                    is_fine = False
-                if y_range and not (y_range[0] < y < y_range[1]):
-                    is_fine = False
-                if is_fine:
-                    x_n.append(x)
-                    y_n.append(y)
-                    d_n.append(d)
-            x_values = x_n
-            y_values = y_n
-            descriptions = d_n
 
             # Create scatter plot with mouseovers
             scatter = go.Scatter(

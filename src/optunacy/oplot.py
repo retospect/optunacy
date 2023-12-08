@@ -33,7 +33,13 @@ class OPlot:
                     )
         return values
 
-
+    def format_value(self, value):
+        if isinstance(value, (int, float)) and (value < 0.001 or value > 10000):
+            return f"{value:.2e}"
+        if isinstance(value, (float)):
+            return f"{value:.4f}"
+        else:
+            return f"{value}"
 
     def describe_trials(self, trials):
         i = 0
@@ -41,28 +47,49 @@ class OPlot:
         for trial in trials:
             desc = f"Trial: {trial.number}"
             for key, value in trial.params.items():
-                if isinstance(value, (int, float)) and (value < 0.001 or value > 10000):
-                    desc += f"<br>{key}: {value:.2e}"
-                if isinstance(value, (float)):
-                    desc += f"<br>{key}: {value:.4f}"
-                else:
-                    desc += f"<br>{key}: {value}"
+                valstr = self.format_value(value)
+                desc += f"<br>{key}: {valstr}"
+            for idx, key in enumerate(self.objective_names):
+                valstr = self.format_value(trial.values[idx])
+                desc += f"<br><i>{key}: {valstr}</i>"
             results.append(desc)
         return results
 
-    def plot(self, x_name, y_name, z_name=None, x_range=None, y_range=None):
+    def plot(
+        self, x_name, y_name, z_name=None, x_range=None, y_range=None, z_range=None
+    ):
         trials = [
-            trial
-            for trial in self.study.trials
-            if trial.state == TrialState.COMPLETE
+            trial for trial in self.study.trials if trial.state == TrialState.COMPLETE
         ]
         x_values = self.get_values(trials, x_name)
         y_values = self.get_values(trials, y_name)
-
         descriptions = self.describe_trials(trials)
+
         layout = 0
         if z_name:
             z_values = self.get_values(trials, z_name)
+            if z_range:
+                x_n = []
+                y_n = []
+                z_n = []
+                d_n = []
+                for x, y, z, d in zip(x_values, y_values, z_values, descriptions):
+                    is_fine = True
+                    if x_range and not (x_range[0] < x < x_range[1]):
+                        is_fine = False
+                    if y_range and not (y_range[0] < y < y_range[1]):
+                        is_fine = False
+                    if z_range[0] < z < z_range[1]:
+                        is_fine = False
+                    if is_fine:
+                        x_n.append(x)
+                        y_n.append(y)
+                        z_n.append(z)
+                        d_n.append(d)
+                x_values = x_n
+                y_values = y_n
+                z_values = z_n
+                descriptions = d_n
 
             # Create a grid for the contour plot
             xi = np.linspace(min(x_values), max(x_values), 100)
@@ -105,6 +132,25 @@ class OPlot:
 
             data = [contour, scatter]
         else:
+            # Filter out the undesired ones
+            # Much optimization can be done here; later.
+            x_n = []
+            y_n = []
+            d_n = []
+            for x, y, d in zip(x_values, y_values, descriptions):
+                is_fine = True
+                if x_range and not (x_range[0] < x < x_range[1]):
+                    is_fine = False
+                if y_range and not (y_range[0] < y < y_range[1]):
+                    is_fine = False
+                if is_fine:
+                    x_n.append(x)
+                    y_n.append(y)
+                    d_n.append(d)
+            x_values = x_n
+            y_values = y_n
+            descriptions = d_n
+
             # Create scatter plot with mouseovers
             scatter = go.Scatter(
                 x=x_values,

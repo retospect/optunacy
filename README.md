@@ -1,4 +1,3 @@
-[![check](https://github.com/retospect/optunacy/actions/workflows/check.yml/badge.svg)](https://github.com/retospect/optunacy/actions/workflows/check.yml)
 # Optunacy - alternate Optuna contour plotter
 
 Plots Optuna contour plots trivially and with detailed mouseovers.

@@ -8,7 +8,7 @@ authors = ["Reto Stamm"]
 maintainers = ["Reto Stamm"]
 description = "Optunacy is a contour plot generator for Optuna studies."
 readme = "README.md"
-version = "0.1.1"
+version = "0.2.0"
 keywords = ["optuna", "contour", "plot", "snn", "hyperparameter", "optimization"]
 license = "GPL-3"
 classifiers = [ "Programming Language :: Python :: 3", ]
@@ -24,7 +24,7 @@ matplotlib = "^3.8.2"
 optuna = "^3.4.0"
 
 [tool.bumpver]
-current_version = "0.1.1"
+current_version = "0.2.0"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true

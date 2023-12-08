@@ -4,18 +4,7 @@
 Plots Optuna contour plots trivially and with detailed mouseovers.
 It collects data from all the hashes in Optuna, as well as the Objectives if you provide them.
 
-The plot function has these options:
-
-``` python
-def plot(self, 
-         x_name, # string
-         y_name, # string
-         z_name=None,  # string
-         x_range=None, # range, ex: x_range=(3,9)
-         y_range=None, # range
-         z_clip=None,  # Clamps colors to max and min
-         interpol="linear"): # <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.griddata.html">interpolation method</a>
-```
+It provides mouseovers with details, too.
 
 ## Example
 
@@ -39,7 +28,23 @@ study.optimize( lambda trial:
 see = OPlot(study, objective_names)
 see.plot("Hidden Layers", "Neurons per Hidden Layer", "Validation Accuracy", z_clip=(0.8,1))
 ```
-![Sample output](imgs/sample1.png)
+![Sample output](images/pic1.png)
+
+
+## Options
+The plot function has these options:
+
+``` python
+def plot(self, 
+         x_name, # string
+         y_name, # string
+         z_name=None,  # string
+         x_range=None, # range, ex: x_range=(3,9)
+         y_range=None, # range
+         z_clip=None,  # Clamps colors to max and min
+         interpol="linear"): # <a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.griddata.html">interpolation method</a>
+```
+
 
 ## Installation
 

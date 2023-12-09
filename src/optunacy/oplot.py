@@ -8,15 +8,17 @@ from optuna.trial import TrialState
 
 
 class OPlot:
-    def __init__(self, study, objective_names=[]):
+    def __init__(self, study, objective_names=[], inlinePlotting=False):
         """Initialize class with study.
         If objective_names is empty, no objectives can be shown.
         :param study: Optuna study object
+        :param inlinePlotting: If True, plots will be shown in the notebook and stored in the notebook file.
         :param objective_names: List of objective names to show,
                                 the string names of the objectives i
                                 returned from the objective function
         """
         self.study = study
+        self.inlinePlotting = inlinePlotting
         self.objective_names = objective_names
         init_notebook_mode(connected=True)  # Plots remain in Notebook
 
@@ -41,6 +43,11 @@ class OPlot:
             return list(params.keys())
 
     def get_values(self, trials, name):
+        """Get the values of a parameter, user attribute, or objective.
+        :param trials: List of trials to get values from
+        :param name: Name of parameter, user attribute, or objective
+        :return: List of values
+        """
         values = []
         for trial in trials:
             if trial.state == TrialState.COMPLETE:
@@ -56,6 +63,11 @@ class OPlot:
         return values
 
     def format_value(self, value):
+        """Format a value for display in a plot.
+        Tries to be reasonable and use exponential notation for very small or large numbers.
+        :param value: Value to format
+        :return: Formatted value
+        """
         if isinstance(value, (int, float)) and (value < 0.001 or value > 10000):
             return f"{value:.2e}"
         if isinstance(value, (float)):
@@ -64,6 +76,11 @@ class OPlot:
             return f"{value}"
 
     def describe_trials(self, trials):
+        """Describe a list of trials with their parameters, user attributes, and objectives.
+        This is used for the mouseovers in the plots.
+        :param trials: List of trials to describe
+        :return: List of descriptions
+        """
         i = 0
         results = []
         for trial in trials:
@@ -87,6 +104,17 @@ class OPlot:
         z_clip=None,
         interpol="linear",
     ):
+        """Create a plot of two parameters, user attributes, or objectives.
+        :param x_name: Name of parameter, user attribute, or objective for x axis
+        :param y_name: Name of parameter, user attribute, or objective for y axis
+        :param z_name: Name of parameter, user attribute, or objective for z axis
+        :param x_range: Range for x axis (optional
+        :param y_range: Range for y axis (optional)
+        :param z_clip: Range for z axis (optional). This clips the colors and contours of the plot, so that
+                       you can see the shape of the plot more easily. It compresses everything beyond the extremes to the respective extreme.
+        :param interpol: Interpolation method for the contour plot. See scipy.interpolate.griddata for options.
+        :return: Plotly plot
+        """
         trials = [
             trial for trial in self.study.trials if trial.state == TrialState.COMPLETE
         ]
@@ -169,4 +197,7 @@ class OPlot:
 
         # Create figure and add data
         fig = go.Figure(data=data, layout=layout)
-        iplot(fig)
+        if self.inlinePlotting:
+            iplot(fig)
+        else:
+            plot(fig)

@@ -1,4 +1,4 @@
-from optunacy import OPlot
+from optunacy.oplot import OPlot
 
 
 def test_commandline_installed():

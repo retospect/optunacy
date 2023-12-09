@@ -9,6 +9,7 @@ It provides mouseovers with details, too.
 ## Example
 
 ```python
+from optunacy.oplot import OPlot
 def optuna_objective(trial, train_loader, test_loader):
     ...
     trial.set_user_attr("Neurons per Hidden Layer", nphl)

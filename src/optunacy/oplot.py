@@ -5,10 +5,22 @@ import numpy as np
 import scipy as scipy
 from optuna.trial import TrialState
 
-try:
+
+def is_running_in_jupyter():
+    try:
+        from IPython import get_ipython
+
+        if (
+            "IPKernelApp" not in get_ipython().config
+        ):  # Check if not in an IPython kernel
+            return False
+    except (ImportError, AttributeError):
+        return False
+    return True
+
+
+if is_running_in_jupyter():
     from plotly.offline import iplot, init_notebook_mode
-except ImportError:
-    print("Can not run offline plotly outside of Jupyter Notebook.")
 
 
 class OPlot:
@@ -24,7 +36,8 @@ class OPlot:
         self.study = study
         self.inlinePlotting = inlinePlotting
         self.objective_names = objective_names
-        init_notebook_mode(connected=True)  # Plots remain in Notebook
+        if is_running_in_jupyter() and inlinePlotting:
+            init_notebook_mode(connected=True)  # Plots remain in Notebook
 
     def parameters(self, wherefrom=True):
         """List all the parameters in the study. Includes parameters, user attributes, and objectives.
@@ -119,6 +132,7 @@ class OPlot:
         :param interpol: Interpolation method for the contour plot. See scipy.interpolate.griddata for options.
         :return: Plotly plot
         """
+        print(self.study)
         trials = [
             trial for trial in self.study.trials if trial.state == TrialState.COMPLETE
         ]

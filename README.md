@@ -1,3 +1,4 @@
+![workflow status](https://github.com/retospect/optunacy/actions/workflows/check.yml/badge.svg?branch=main)
 # Optunacy - alternate Optuna contour plotter
 
 Plots Optuna contour plots trivially and with detailed mouseovers.

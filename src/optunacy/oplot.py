@@ -20,6 +20,26 @@ class OPlot:
         self.objective_names = objective_names
         init_notebook_mode(connected=True)  # Plots remain in Notebook
 
+    def parameters(self, wherefrom=True):
+        """List all the parameters in the study. Includes parameters, user attributes, and objectives.
+        :param wherefrom: If True, print the type of parameter '"Accuacy": [Objective]', if false, just the strings.
+        :return: List of parameter names
+        """
+        params = (
+            {}
+        )  # Keys are parameters, values are the string representing the source
+        for trial in self.study.trials:
+            for key in trial.params.keys():
+                params[key] = "Parameter"
+            for key in trial.user_attrs.keys():
+                params[key] = "User Attribute"
+            for index, key in enumerate(self.objective_names):
+                params[key] = "Objective"
+        if wherefrom:
+            return params
+        else:
+            return list(params.keys())
+
     def get_values(self, trials, name):
         values = []
         for trial in trials:

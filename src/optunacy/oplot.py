@@ -1,10 +1,14 @@
 from matplotlib import pyplot as plt
 import plotly.graph_objs as go
-from plotly.offline import iplot, init_notebook_mode
 import matplotlib.ticker as ticker
 import numpy as np
 import scipy as scipy
 from optuna.trial import TrialState
+
+try:
+    from plotly.offline import iplot, init_notebook_mode
+except ImportError:
+    print("Can not run offline plotly outside of Jupyter Notebook.")
 
 
 class OPlot:

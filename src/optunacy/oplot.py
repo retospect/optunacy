@@ -1,5 +1,6 @@
 from matplotlib import pyplot as plt
 import plotly.graph_objs as go
+from plotly.offline import iplot, init_notebook_mode
 import matplotlib.ticker as ticker
 import numpy as np
 import scipy as scipy
@@ -17,6 +18,7 @@ class OPlot:
         """
         self.study = study
         self.objective_names = objective_names
+        init_notebook_mode(connected=True)  # Plots remain in Notebook
 
     def get_values(self, trials, name):
         values = []
@@ -147,4 +149,4 @@ class OPlot:
 
         # Create figure and add data
         fig = go.Figure(data=data, layout=layout)
-        return fig
+        iplot(fig)
